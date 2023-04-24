@@ -15,6 +15,7 @@ constexpr auto CyrillicCodePage = 1251;
 
 #pragma execution_character_set("utf-8")
 
+/** Converts a wstring to string using the specified code page. */
 std::string ToSingleByteString(const std::wstring& str, int codePage)
 {
 
@@ -33,6 +34,8 @@ std::string ToSingleByteString(const std::wstring& str, int codePage)
     return { output.begin(), output.begin() + bytes };
 }
 
+
+/** Converts a string to wstring using the specified code page */
 std::wstring ToMultiByteString(const std::string& str, int codePage)
 {
     int bytes = MultiByteToWideChar(codePage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
@@ -50,6 +53,7 @@ std::wstring ToMultiByteString(const std::string& str, int codePage)
     return { output.begin(), output.begin() + bytes };
 }
 
+// Convenience function for converting wstring to string assuming system locale
 namespace ScConvert {
     std::string ToANSI(const std::wstring& input)
     {
@@ -57,7 +61,7 @@ namespace ScConvert {
     }
 }
 
-
+/** Illustrate how 'Unicode' to 'ansi' works under various code pages */
 void FunWithAnsi()
 {
     const std::wstring input = L"Hélène Strauß Jäger";
