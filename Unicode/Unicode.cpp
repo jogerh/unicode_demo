@@ -19,38 +19,38 @@ constexpr auto CyrillicCodePage = 1251;
 std::string ToSingleByteString(const std::wstring& str, int codePage)
 {
 
-    int bytes = WideCharToMultiByte(codePage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0, nullptr, nullptr);
+    int numBytes = WideCharToMultiByte(codePage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0, nullptr, nullptr);
 
-    if (bytes == 0)
+    if (numBytes == 0)
         throw std::system_error(static_cast<int>(GetLastError()), std::system_category());
 
-    std::string output(bytes, ' ');
+    std::string output(numBytes, ' ');
 
-    bytes = WideCharToMultiByte(codePage, 0, str.data(), static_cast<int>(str.size()), output.data(), static_cast<int>(output.size()), nullptr, nullptr);
+    numBytes = WideCharToMultiByte(codePage, 0, str.data(), static_cast<int>(str.size()), output.data(), static_cast<int>(output.size()), nullptr, nullptr);
 
-    if (bytes == 0)
+    if (numBytes == 0)
         throw std::system_error(static_cast<int>(GetLastError()), std::system_category());
 
-    return { output.begin(), output.begin() + bytes };
+    return { output.begin(), output.begin() + numBytes };
 }
 
 
 /** Converts a string to wstring using the specified code page */
 std::wstring ToMultiByteString(const std::string& str, int codePage)
 {
-    int bytes = MultiByteToWideChar(codePage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
+    int numChars = MultiByteToWideChar(codePage, 0, str.data(), static_cast<int>(str.size()), nullptr, 0);
 
-    if (bytes == 0)
+    if (numChars == 0)
         throw std::system_error(static_cast<int>(GetLastError()), std::system_category());
 
-    std::wstring output(bytes, ' ');
+    std::wstring output(numChars, ' ');
 
-    bytes = MultiByteToWideChar(codePage, 0, str.data(), static_cast<int>(str.size()), output.data(), static_cast<int>(output.size()));
+    numChars = MultiByteToWideChar(codePage, 0, str.data(), static_cast<int>(str.size()), output.data(), static_cast<int>(output.size()));
 
-    if (bytes == 0)
+    if (numChars == 0)
         throw std::system_error(static_cast<int>(GetLastError()), std::system_category());
 
-    return { output.begin(), output.begin() + bytes };
+    return { output.begin(), output.begin() + numChars };
 }
 
 // Convenience function for converting wstring to string assuming system locale
